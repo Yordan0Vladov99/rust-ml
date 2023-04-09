@@ -1,5 +1,8 @@
 use rand::{thread_rng, Rng};
-use std::fmt::{Debug, Formatter, Result};
+use std::{
+	f64::consts::E,
+	fmt::{Debug, Formatter, Result},
+};
 
 #[derive(Clone)]
 pub struct Matrix {
@@ -36,6 +39,16 @@ impl Matrix {
 			cols: data[0].len(),
 			data,
 		}
+	}
+
+	pub fn euler_sum(&self) -> f64 {
+		let mut s: f64 = 0.0;
+		for i in 0..self.rows {
+			for j in 0..self.cols {
+				s += E.powf(self.data[i][j]);
+			}
+		}
+		s
 	}
 
 	pub fn multiply(&self, other: &Matrix) -> Matrix {

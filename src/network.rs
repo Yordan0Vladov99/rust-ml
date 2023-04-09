@@ -1,4 +1,5 @@
 use std::{
+	f64::consts::E,
 	fs::File,
 	io::{Read, Write},
 };
@@ -62,7 +63,8 @@ impl Network<'_> {
 				.map(self.activation.function);
 			self.data.push(current.clone());
 		}
-
+		let sum = current.euler_sum();
+		current.map(&|x| E.powf(x) / sum);
 		current.transpose().data[0].to_owned()
 	}
 
@@ -94,6 +96,7 @@ impl Network<'_> {
 				println!("Epoch {} of {}", i, epochs);
 			}
 			for j in 0..inputs.len() {
+				//println!("Input {} of {}", j + 1, inputs.len());
 				let outputs = self.feed_forward(inputs[j].clone());
 				self.back_propogate(outputs, targets[j].clone());
 			}

@@ -1,25 +1,21 @@
-use activations::SIGMOID;
-use network::Network;
+use rust_ml::{improve_network, test_network, train_network};
 
 pub mod activations;
+pub mod data;
 pub mod matrix;
 pub mod network;
 
 fn main() {
-	let inputs = vec![
-		vec![0.0, 0.0],
-		vec![0.0, 1.0],
-		vec![1.0, 0.0],
-		vec![1.0, 1.0],
-	];
-	let targets = vec![vec![0.0], vec![1.0], vec![1.0], vec![0.0]];
+	let command = rprompt::prompt_reply(
+		"What would you like to do ('train', 'improve','test','exit')?\n -> ",
+	)
+	.expect("Failed to read input");
 
-	let mut network = Network::new(vec![2, 3, 1], 0.5, SIGMOID);
-
-	network.train(inputs, targets, 1000);
-
-	println!("{:?}", network.feed_forward(vec![0.0, 0.0]));
-	println!("{:?}", network.feed_forward(vec![0.0, 1.0]));
-	println!("{:?}", network.feed_forward(vec![1.0, 0.0]));
-	println!("{:?}", network.feed_forward(vec![1.0, 1.0]));
+	match command.as_str() {
+		"train" => train_network(),
+		"improve" => improve_network(),
+		"test" => test_network(),
+		"exit" => println!("Goodbye!"),
+		_ => println!("Invalid command! Try again!"),
+	}
 }
